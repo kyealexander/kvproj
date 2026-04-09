@@ -3,12 +3,25 @@
 #include <kv.h>
 
 int main(void) {
-    kv_t *db = kv_init(16);
+    kv_t *db = kv_init(1024);
     
     assert(db != NULL);
-    assert(db->capacity == 16);
+    assert(db->capacity == 1024);
     assert(db->count == 0);
     assert(db->entries != NULL);
+
+    kv_put(db, "hehe", "haha");
+    kv_put(db, "hehe", "hoho");
+    kv_put(db, "lala", "hoho");
+
+    for (size_t i = 0; i < db->capacity; i++) {
+        if (db->entries[i].key) {
+            printf("[%ld] %s: %s\n", 
+            i,
+            db->entries[i].key, 
+            db->entries[i].value);
+        }
+    }
 
     kv_free(db);
     
