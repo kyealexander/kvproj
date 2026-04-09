@@ -1,11 +1,12 @@
-#include <kv.h>
 #include <string.h>
 #include <stdlib.h>
 
-#define TOMBSTONE 0x1
+#include "kv.h"
+
+#define TOMBSTONE ((char *)0x1)
 
 
-size_t hash(char *val, int capacity) {
+static size_t hash(const char *val, size_t capacity) {
     size_t hash = 0x13371337deadbeef;
 
     while(*val) {
@@ -19,12 +20,12 @@ size_t hash(char *val, int capacity) {
     return hash % capacity;
 }
 
-int kv_put(kv_t *db, char *key, char *value) {
+int kv_put(kv_t *db, const char *key, const char *value) {
     if (!db || !key || !value) return -1;
 
     size_t idx = hash(key, db->capacity);
 
-    for (size_t i = 0; i < db->capacity - 1; i++) {
+    for (size_t i = 0; i < db->capacity; i++) {
         size_t real_idx = (idx + i) % db->capacity;
 
         kv_entry_t *entry = &db->entries[real_idx];
@@ -34,6 +35,8 @@ int kv_put(kv_t *db, char *key, char *value) {
             !strcmp(entry->key, key)) {
                 char *newval = strdup(value);
                 if (!newval) return -1;
+
+                free(entry->value);
                 entry->value = newval;
                 
                 return real_idx;    

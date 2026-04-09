@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
-#include <kv.h>
+
+#include "kv.h"
 
 int main(void) {
     kv_t *db = kv_init(1024);
@@ -16,7 +17,7 @@ int main(void) {
 
     for (size_t i = 0; i < db->capacity; i++) {
         if (db->entries[i].key) {
-            printf("[%ld] %s: %s\n", 
+            printf("[%zu] %s: %s\n", 
             i,
             db->entries[i].key, 
             db->entries[i].value);
