@@ -39,7 +39,7 @@ int kv_put(kv_t *db, const char *key, const char *value) {
                 free(entry->value);
                 entry->value = newval;
                 
-                return real_idx;    
+                return 0;    
             }
 
         if (!entry->key || entry->key == (void*)TOMBSTONE) {
@@ -54,7 +54,7 @@ int kv_put(kv_t *db, const char *key, const char *value) {
             entry->key = newkey;
 
             db->count++;
-            return real_idx;
+            return 0;
         }
     }
 
