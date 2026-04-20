@@ -40,7 +40,7 @@ kv_t *kv_init(size_t capacity) {
     return db;
 }
 
-int kv_put(kv_t *db, const char *key, const char *value) {
+int kv_put(kv_t *db, char *key, char *value) {
     if (!db || !key || !value) return -1;
 
     size_t idx = hash(key, db->capacity);
