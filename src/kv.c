@@ -6,6 +6,21 @@
 #define TOMBSTONE ((char *)0x1)
 
 
+static char *kv_strdup(const char *src) {
+    if (src == NULL) {
+        return NULL;
+    }
+
+    size_t len = strlen(src) + 1;
+    char *copy = malloc(len);
+    if (copy == NULL) {
+        return NULL;
+    }
+
+    memcpy(copy, src, len);
+    return copy;
+}
+
 static size_t hash(const char *val, size_t capacity) {
     size_t hash = 0x13371337deadbeef;
 
@@ -53,7 +68,7 @@ int kv_put(kv_t *db, char *key, char *value) {
         if (entry->key &&
             entry->key != (void*)TOMBSTONE &&
             !strcmp(entry->key, key)) {
-                char *newval = strdup(value);
+                char *newval = kv_strdup(value);
                 if (!newval) return -1;
 
                 free(entry->value);
@@ -63,8 +78,8 @@ int kv_put(kv_t *db, char *key, char *value) {
             }
 
         if (!entry->key || entry->key == (void*)TOMBSTONE) {
-            char *newval = strdup(value);
-            char *newkey = strdup(key);
+            char *newval = kv_strdup(value);
+            char *newkey = kv_strdup(key);
             if (!newval || !newkey) {
                 free(newkey);
                 free(newval);
