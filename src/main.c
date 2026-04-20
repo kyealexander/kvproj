@@ -13,7 +13,7 @@ int main(void) {
 
     kv_put(db, "hehe", "haha");
     kv_put(db, "hehe", "hoho");
-    kv_put(db, "lala", "hoho");
+    kv_put(db, "lala", "baba");
 
     for (size_t i = 0; i < db->capacity; i++) {
         if (db->entries[i].key) {
@@ -23,6 +23,15 @@ int main(void) {
             db->entries[i].value);
         }
     }
+
+    char *val = kv_get(db, "hehe");
+    char *val2 = kv_get(db, "lala");
+    char *val3 = kv_get(db, "this doesn't exist");
+
+    printf("%s %s %s\n",
+       val ? val : "(null)",
+       val2 ? val2 : "(null)",
+       val3 ? val3 : "(null)");
 
     kv_free(db);
     
